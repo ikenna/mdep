@@ -24,7 +24,6 @@ jobs:
           cache: maven
       - name: Publish SDK to GitHub Packages
         run: |
-          cd build-output/java-client
           mvn -X --batch-mode deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
