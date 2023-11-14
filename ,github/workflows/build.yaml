@@ -1,0 +1,30 @@
+name: Mainline merge
+
+on:
+  push:
+    branches:
+      - main
+env:
+  GITHUB_RUN_NUMBER: ${{ github.run_number }}
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Publish SDK to GitHub Packages
+        run: |
+          cd build-output/java-client
+          mvn -X --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
